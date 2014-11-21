@@ -1,0 +1,19 @@
+{
+  "name": "dataviz",
+  "version": "0.0.0",
+  "homepage": "https://github.com/natsn/dataviz",
+  "authors": [
+    "Nate Nichols <nathann@ori.org>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "d3": "~3.4.13"
+  }
+}
