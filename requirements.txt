@@ -3,4 +3,9 @@ Jinja2==2.7.3
 MarkupSafe==0.23
 Werkzeug==0.9.6
 itsdangerous==0.24
+numpy==1.9.1
+pandas==0.15.1
+python-dateutil==2.2
+pytz==2014.10
+six==1.8.0
 wsgiref==0.1.2

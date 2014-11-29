@@ -4,13 +4,22 @@
 <meta charset=utf-8>
 <meta name="viewport" content="width=620">
 <title>DataViz</title>
+<style type="text/css">
+  *{
+    font-family:sans-serif;
+  }
+</style>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='c3/c3.css') }}">
 <script type="text/javascript" src="{{ url_for('static', filename='d3/d3.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='c3/c3.min.js') }}"></script>
 
 </head>
 <body>
 <section id="wrapper">
     <header>
-      <h1>Drag and drop, automatic upload</h1>
+      <center>
+      <h1>Drag and drop a CSV</h1>
+      </center>
     </header>
 
 <style>
@@ -26,12 +35,12 @@ progress:after { content: '%'; }
 <article>
   <div id="holder">
   </div> 
-  <p id="upload" class="hidden"><label>Drag & drop not supported, but you can still upload via this input field:<br><input type="file"></label></p>
-  <p id="filereader">File API & FileReader API not supported</p>
+  <p id="upload" class="hidden"><label>Drag &amp; drop not supported, but you can still upload via this input field:<br><input type="file"></label></p>
+  <p id="filereader">File API &amp; FileReader API not supported</p>
   <p id="formdata">XHR2's FormData is not supported</p>
   <p id="progress">XHR2's upload progress isn't supported</p>
   <p>Upload progress: <progress id="uploadprogress" min="0" max="100" value="0">0</progress></p>
-  <p>Drag an image from your desktop on to the drop zone above to see the browser both render the preview, but also upload automatically to this server.</p>
+  <div id="chart"></div>
 </article>
 <script>
 var holder = document.getElementById('holder'),
@@ -82,7 +91,6 @@ function previewfile(file) {
 }
 
 function readfiles(files) {
-    debugger;
     var formData = tests.formdata ? new FormData() : null;
     for (var i = 0; i < files.length; i++) {
       if (tests.formdata) formData.append('file', files[i]);
@@ -93,6 +101,20 @@ function readfiles(files) {
     if (tests.formdata) {
       var xhr = new XMLHttpRequest();
       xhr.open('POST', '/upload');
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4) {
+          parsed = JSON.parse(xhr.responseText);
+          console.log(parsed);
+          // {'key1':['1','2'],'key2':['1','2']} --> ['key1',1,2], ['key2',1,2]
+          var chart = c3.generate({
+              bindto: '#chart',
+              data: {
+                columns: parsed
+              }
+          });
+
+        }
+      }
       xhr.onload = function() {
         progress.value = progress.innerHTML = 100;
       };
@@ -124,12 +146,6 @@ if (tests.dnd) {
     readfiles(this.files);
   };
 }
-</script>
-
-<script type="text/javascript">
-    // TODO: d3 code
-    d3.select("body").append("p").text("Hello from d3!");
-
 </script>
 </section>
 </body>
