@@ -3,9 +3,12 @@ import csv
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+
+
 @app.route("/")
 def hello():
     return render_template('index.html')
+
 
 @app.route("/upload", methods=['POST'])
 def upload():
@@ -15,7 +18,7 @@ def upload():
     keys = next(reader)
     data = {}
 
-    for k,c in zip(keys, zip(*reader)):
+    for k, c in zip(keys, zip(*reader)):
         data[k] = list(c)
 
     return jsonify(**data)
